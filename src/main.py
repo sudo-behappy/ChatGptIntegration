@@ -19,17 +19,20 @@ class Application(QtWidgets.QMainWindow, Ui_ChatGPTIntergration):
         self.time_list = []
         self.CommandRecord.appendPlainText("-" * 20 + "WELCOME" + "-" * 20)
         content = ''
-        with open("env", "r", encoding="utf-8") as f:
-            content = f.read()
-        self.update_api_key(content)
+        try:
+            with open("env", "r", encoding="utf-8") as f:
+                content = f.read()
+            self.update_api_key(content)
+        except FileNotFoundError:
+            open("env", "w+", encoding="utf-8")
 
     def update_command_string(self, string):
         self.CommandRecord.appendPlainText(string)
 
     def continue_chat(self):
         self.update_command_string("功能还未实装，暂时无法使用")
-        self.chat_purge_and_save()
-        self.resume_chat(self.ChatPath.text())
+        # self.chat_purge_and_save()
+        # self.resume_chat(self.ChatPath.text())
 
     def upload_chat_content(self):
         """
