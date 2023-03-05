@@ -6,7 +6,7 @@ A chatGPT implementation GUI version via PyQt5, also my PyQt5 practice project
 
 
 
-## 构建(Windows & Linux)
+## 构建
 
 **要求: python >= 3.10**
 
@@ -15,12 +15,6 @@ A chatGPT implementation GUI version via PyQt5, also my PyQt5 practice project
 然后运行`pyinstaller -F main.py -p functions.py -p main_ui.py`
 
 可执行文件将会出现在./dist目录下
-
-## 使用(MacOS)
-
-macOS暂时不支持构建, 请请使用源码运行
-
-安装要求之后, 在./src目录下打开终端, 运行`python main.py`
 
 ## 关于API key
 
