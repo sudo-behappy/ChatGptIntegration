@@ -155,3 +155,4 @@ cython_debug/
 history
 .idea
 env
+test.py

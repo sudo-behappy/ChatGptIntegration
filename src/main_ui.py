@@ -100,6 +100,7 @@ class Ui_ChatGPTIntergration(object):
         self.horizontalLayout_5.addWidget(self.pushButton)
         self.verticalLayout_2.addLayout(self.horizontalLayout_5)
         self.ChatRecord = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.ChatRecord.setReadOnly(True)
         self.ChatRecord.setObjectName("ChatRecord")
         self.verticalLayout_2.addWidget(self.ChatRecord)
         self.line = QtWidgets.QFrame(self.centralwidget)
@@ -283,12 +284,12 @@ class Ui_ChatGPTIntergration(object):
         self.Hint.setHtml(_translate("ChatGPTIntergration", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'方正黑体简体\'; font-size:13.5pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">使用方法:</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">1. 输入api key</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">2. 在聊天框内输入聊天内容</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">3. 点击上传聊天内容的按钮</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">4. 等待回应</p></body></html>"))
+"</style></head><body style=\" font-family:\'方正黑体简体\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13.5pt;\">使用方法:</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13.5pt;\">1. 输入api key</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13.5pt;\">2. 在聊天框内输入聊天内容</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13.5pt;\">3. 点击上传聊天内容的按钮</span></p>\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:13.5pt;\">4. 等待回应</span></p></body></html>"))
         self.PurgeChatDataAndSave.setText(_translate("ChatGPTIntergration", "清除并保存聊天记录"))
         self.PurgeChatDataWithoutSave.setText(_translate("ChatGPTIntergration", "清除但不保存聊天记录"))
         self.OpenChatFolder.setText(_translate("ChatGPTIntergration", "打开聊天记录文件夹"))

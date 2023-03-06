@@ -9,6 +9,8 @@ import time
 import os
 import re
 
+STATEMENT_START: bytes = b"START"
+STATEMENT_END: bytes = b"END"
 
 class Application(QtWidgets.QMainWindow, Ui_ChatGPTIntergration):
     def __init__(self):
@@ -30,9 +32,8 @@ class Application(QtWidgets.QMainWindow, Ui_ChatGPTIntergration):
         self.CommandRecord.appendPlainText(string)
 
     def continue_chat(self):
-        self.update_command_string("功能还未实装，暂时无法使用")
-        # self.chat_purge_and_save()
-        # self.resume_chat(self.ChatPath.text())
+        self.chat_purge_and_save()
+        self.resume_chat(self.ChatPath.text())
 
     def upload_chat_content(self):
         """
@@ -45,6 +46,8 @@ class Application(QtWidgets.QMainWindow, Ui_ChatGPTIntergration):
         self.chat_list.append({"role": "user", "content": chat_content})
         try:
             start = time.time()
+            self.ChatRecord.appendPlainText("-" * 20 + "\nUSER:" + chat_content)
+            time.sleep(0.5)
             result = functions.openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=self.chat_list
@@ -54,7 +57,7 @@ class Application(QtWidgets.QMainWindow, Ui_ChatGPTIntergration):
             self.time_list.append(functions.get_time())
             self.chat_list.append({"content": str(returning["content"]), "role": returning["role"]})
             result = str(result["choices"][0]["message"]["content"])
-            self.ChatRecord.appendPlainText("-" * 20 + "\n" + result)
+            self.ChatRecord.appendPlainText("\nGPT: " + result)
         except Exception as e:
             result = traceback.format_exc()
             self.update_command_string(result)
@@ -76,12 +79,20 @@ class Application(QtWidgets.QMainWindow, Ui_ChatGPTIntergration):
         save and purge the chat data then start a new chat
         :return:
         """
+        if self.ChatRecord.toPlainText() == "":
+            self.update_command_string("no chat record to save")
+            return
         self.ChatRecord.clear()
         functions.save_chat(self.chat_list, self.time_list, functions.get_time())
         self.chat_purge_without_save()
         self.open_chat_record_folder()
+        self.update_command_string("chat saved and purged")
 
     def open_chat_record_folder(self):
+        """
+        open the folder where the chat record is saved
+        :return:
+        """
         try:
             os.mkdir("history")
         except FileExistsError:
@@ -90,25 +101,29 @@ class Application(QtWidgets.QMainWindow, Ui_ChatGPTIntergration):
             case "Windows":
                 os.startfile("history")
             case "Darwin":
-                # TODO: launch finder via command
-                pass
+                os.system("open history")
             case "Linux":
-                # TODO: launch finder via command
-                pass
-                os.startfile()
+                os.system("xdg-open history")
         self.update_command_string("folder opened")
 
     def show_how_to_apikey(self):
         """
-        display this fantastic help
+        display this help
         :return:
         """
         self.VariableHint.clear()
-        self.VariableHint.appendPlainText("请管软件开发者要API Key")
+        self.VariableHint.appendPlainText("""
+        1. 前往 https://platform.openai.com/, 并用你的openai账户登录
+        2. 点击右上角的头像，选择API Key
+        3. 申请API Key, 复制到给定的输入框中
+        4. API Key会自动保存到./env目录下
+        5. 请勿将API Key泄露给他人
+        """)
 
     def chat_content_updated(self):
         """
         This method is prepared for future use, now it has no use
+        :return:
         """
         pass
 
@@ -157,23 +172,43 @@ class Application(QtWidgets.QMainWindow, Ui_ChatGPTIntergration):
         self.CommandRecord.clear()
 
     def lock_api_field(self, is_locked):
+        """
+        lock the api key field
+        :param is_locked: whether to lock the field
+        :return:
+        """
         self.APIkey.setEnabled(not is_locked)
 
     def resume_chat(self, path):
         try:
-            with open(path, "r", encoding="utf-8") as f:
+            with open(path.strip(" ").strip("\"").replace("：", ":"), "r", encoding="utf-8") as f:
                 user = True
-                for line in f.read().split("\n"):
-                    date = str(re.match(r"\[\d+_\d{2}_\d{2}_\d{2}_\d{2}_\d{2}\]", line))
-                    content = str(re.match("(?:USER|GPT):(.*)", line).group(1))
-                    print(date, content)
+                file_content = f.read()
+                dates = re.findall(r"(\[\d+_\d{2}_\d{2}_\d{2}_\d{2}_\d{2}\])", file_content)
+                print(dates)
+                index = 0
+                for line in re.split(r"\[\d+_\d{2}_\d{2}_\d{2}_\d{2}_\d{2}\]", file_content):
+                    if line == "":
+                        continue
+                    date = dates[index]
+                    content = line.strip(" GPT: ").strip(" USER: ")
                     self.chat_list.append({"content": content, "role": "user" if user else "assistant"})
                     self.time_list.append(date)
                     user = not user
+                    index += 1
         except FileNotFoundError:
             self.update_command_string("ERROR: 非法路径")
         self.update_command_string("chat continued...")
-                
+        self.restore_chat()
+
+    def restore_chat(self):
+            for i in self.chat_list:
+                match i["role"]:
+                    case "assistant":
+                        self.ChatRecord.appendPlainText("GPT: " + str(i["content"]))
+                    case "user":
+                        self.ChatRecord.appendPlainText("-" * 20 + "\nUSER: " + str(i["content"]))
+
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     chat_application = Application()

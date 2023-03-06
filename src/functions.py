@@ -1,16 +1,7 @@
 import traceback
-
 import openai
 import time
 import os
-
-def exception_save(chat_list, time_list, message):
-    message_time = time.strftime(r"%Y_%m_%d_%H_%M_%S", time.localtime())
-    time_list.append(message_time)
-    chat_list.append({"content": message, "role": "assistant"})
-    save_chat(chat_list, time_list, message_time)
-    exit(message + " as {}.txt".format(message_time))
-
 
 def save_chat(chat_list, time_list, name):
     try:
@@ -32,18 +23,4 @@ def save_chat(chat_list, time_list, name):
 def get_time():
     return time.strftime(r"%Y_%m_%d_%H_%M_%S", time.localtime())
 
-
-def multiline_input(message):
-    print(message, end="")
-    lines = ""
-    while True:
-        try:
-            line = input()
-            if line:
-                lines += line + "\n"
-            else:
-                break
-        except EOFError:
-            break
-    return lines
 
