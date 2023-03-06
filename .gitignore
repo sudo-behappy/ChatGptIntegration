@@ -156,3 +156,7 @@ history
 .idea
 env
 test.py
+
+# pipenv
+Pipfile.lock
+Pipfile

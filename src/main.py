@@ -95,8 +95,9 @@ class Application(QtWidgets.QMainWindow, Ui_ChatGPTIntergration):
         """
         try:
             os.mkdir("history")
+            self.update_command_string("history folder not detected, creating...")
         except FileExistsError:
-            pass
+            self.update_command_string("history folder detected, opening...")
         match platform.system():
             case "Windows":
                 os.startfile("history")
