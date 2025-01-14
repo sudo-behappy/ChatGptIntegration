@@ -16,14 +16,6 @@ A chatGPT implementation GUI version via PyQt5, also my PyQt5 practice project
 
 可执行文件将会出现在./dist目录下
 
-## 关于API key
-
-作者不提供openAI代注册服务, 请自行注册
-
-如果想要使用作者的API key, 请联系作者, 作者将酌情提供
-
-Email: 3216539984@qq.com
-
 ## 关于国内的访问问题
 
 由于ChatGPT的API在国内无法访问, 请在运行时使用VPN或代理
